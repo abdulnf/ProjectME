@@ -1,6 +1,5 @@
 package programmer.belajar.controller;
 
-import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,18 +66,27 @@ class UserControllerTest {
                     result.getResponse().getContentAsString(),
                     new TypeReference<>() {}
             );
-//            assertEquals("OK", response.getData());
             assertNotNull(response.getErrors());
         });
 
 
-//        ).andExpectAll(
-//                status().isOk(),
-//
-//        ).andDo(result -> {
-//            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
-//            });
-//            assertEquals("OK",response.getData());
-//        });
+
+    }
+
+    @Test
+    void getUserUnauthorrized() throws Exception {
+        mockMvc.perform(
+                get("/api/users/current")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-TOKEN", "notfound")
+        ).andExpectAll(
+                status().isUnauthorized()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(
+                    result.getResponse().getContentAsString(),
+                    new TypeReference<>() {}
+            );
+            assertNotNull(response.getErrors());
+        });
     }
 }
