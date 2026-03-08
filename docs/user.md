@@ -4,7 +4,7 @@
 - Request body : 
 ```json
 {
-  "username":"naze",
+  "username":"abdul",
   "password" : "jaya",
   "name" : "furnaze"
 }
@@ -28,7 +28,7 @@ Respons Body (Failed) :
 - Request body :
 ```json
 {
-  "username":"naze",
+  "username":"abdul",
   "password" : "jaya"
 }
 ```
@@ -58,7 +58,7 @@ Respons Body (Success) :
 ```json
 {
   "data" : {
-    "username" : "naze",
+    "username" : "abdul",
     "name" : "furnaze"
   }
 }
@@ -88,7 +88,7 @@ Respons Body (Success) :
 ```json
 {
   "data" : {
-    "username" : "naze",
+    "username" : "abdul",
     "name" : "furnaze"
   }
 }

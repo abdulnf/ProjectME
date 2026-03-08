@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import programmer.belajar.entity.User;
 import programmer.belajar.model.RegisterUserRequest;
+import programmer.belajar.model.UpdateUserRequest;
 import programmer.belajar.model.UserResponse;
 import programmer.belajar.repository.UserRepository;
 import programmer.belajar.security.BCrypt;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -49,4 +51,27 @@ public class UserService {
                 .name(user.getName())
                 .build();
     }
+    @Transactional
+    public UserResponse update(User user, UpdateUserRequest request){
+        validationService.validate(request);
+        if (Objects.nonNull(request.getName())){
+            user.setName(request.getName());
+
+        }
+
+        if (Objects.nonNull(request.getPassword())) {
+            user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+        }
+
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .name(user.getName())
+                .username(user.getUsername())
+                .build();
+        }
+
+
 }
+
+
