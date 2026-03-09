@@ -70,6 +70,7 @@ class UserControllerTest {
             WebResponse<String> response = objectMapper.readValue(
                     result.getResponse().getContentAsString(),
                     new TypeReference<>() {}
+
             );
             assertNotNull(response.getErrors());
         });
