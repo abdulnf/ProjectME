@@ -3,12 +3,12 @@ package programmer.belajar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import programmer.belajar.entity.User;
 import programmer.belajar.model.AddressResponse;
 import programmer.belajar.model.CreateAddressRequest;
 import programmer.belajar.model.UpdateAddressRequest;
 import programmer.belajar.model.WebResponse;
 import programmer.belajar.service.AddressService;
+import programmer.belajar.user.User;
 
 import java.util.List;
 

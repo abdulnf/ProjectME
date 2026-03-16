@@ -5,11 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import programmer.belajar.entity.User;
+//import programmer.belajar.entity.User;
 import programmer.belajar.model.LoginUserRequest;
 import programmer.belajar.model.TokenResponse;
-import programmer.belajar.repository.UserRepository;
 import programmer.belajar.security.BCrypt;
+import programmer.belajar.user.UserRepository;
+import programmer.belajar.user.User;
 
 import java.util.UUID;
 

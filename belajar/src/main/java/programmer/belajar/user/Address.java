@@ -1,6 +1,7 @@
-package programmer.belajar.entity;
+package programmer.belajar.user ;
 
 import jakarta.persistence.*;
+import programmer.belajar.entity.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

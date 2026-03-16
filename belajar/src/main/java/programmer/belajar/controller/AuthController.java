@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import programmer.belajar.entity.User;
+//import programmer.belajar.entity.User;
 import programmer.belajar.model.LoginUserRequest;
 import programmer.belajar.model.TokenResponse;
 import programmer.belajar.model.WebResponse;
 import programmer.belajar.service.AuthService;
+import programmer.belajar.user.User;
 
 @RestController
 public class AuthController {

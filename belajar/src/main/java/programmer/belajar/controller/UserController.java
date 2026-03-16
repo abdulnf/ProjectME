@@ -2,12 +2,13 @@ package programmer.belajar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import programmer.belajar.entity.User;
+//import programmer.belajar.entity.User;
 import programmer.belajar.model.RegisterUserRequest;
 import programmer.belajar.model.UpdateUserRequest;
 import programmer.belajar.model.UserResponse;
 import programmer.belajar.model.WebResponse;
 import programmer.belajar.service.UserService;
+import programmer.belajar.user.User;
 
 @RestController
 public class UserController {

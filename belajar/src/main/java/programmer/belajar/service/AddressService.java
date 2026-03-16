@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import programmer.belajar.entity.Address;
+import programmer.belajar.user.Address;
 import programmer.belajar.entity.Contact;
-import programmer.belajar.entity.User;
 import programmer.belajar.model.AddressResponse;
 import programmer.belajar.model.CreateAddressRequest;
 import programmer.belajar.model.UpdateAddressRequest;
 import programmer.belajar.repository.AddressRepository;
 import programmer.belajar.repository.ContactRepository;
+import programmer.belajar.user.User;
 
 import java.util.List;
 import java.util.UUID;

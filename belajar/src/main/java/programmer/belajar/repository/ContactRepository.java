@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import programmer.belajar.entity.Contact;
-import programmer.belajar.entity.User;
+import programmer.belajar.user.User;
 
 import java.util.Optional;
 

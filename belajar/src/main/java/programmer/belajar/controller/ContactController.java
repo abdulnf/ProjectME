@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import programmer.belajar.entity.User;
 import programmer.belajar.model.*;
 
 import programmer.belajar.service.ContactService;
+import programmer.belajar.user.User;
 
 import java.util.List;
 

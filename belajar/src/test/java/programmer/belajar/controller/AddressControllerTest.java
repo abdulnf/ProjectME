@@ -9,26 +9,23 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import programmer.belajar.entity.Address;
 import programmer.belajar.entity.Contact;
-import programmer.belajar.entity.User;
 import programmer.belajar.model.AddressResponse;
 import programmer.belajar.model.CreateAddressRequest;
 import programmer.belajar.model.UpdateAddressRequest;
 import programmer.belajar.model.WebResponse;
 import programmer.belajar.repository.AddressRepository;
 import programmer.belajar.repository.ContactRepository;
-import programmer.belajar.repository.UserRepository;
+import programmer.belajar.user.UserRepository;
 import programmer.belajar.security.BCrypt;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.MockMvcBuilder .*;
 import static org. springframework.test.web.servlet.request.MockMvcRequestBuilders .*;
 import static org. springframework.test.web.servlet.result.MockMvcResultMatchers .*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers .*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 
@@ -62,6 +59,7 @@ class AddressControllerTest {
         user.setToken("test");
         user.setTokenExpiredAt(System.currentTimeMillis() + 1000000);
         userRepository.save(user);
+//        userRepository.save(user);
 
         Contact contact = new Contact();
         contact.setId("test");

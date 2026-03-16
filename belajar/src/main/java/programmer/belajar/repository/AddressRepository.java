@@ -2,7 +2,7 @@ package programmer.belajar.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import programmer.belajar.entity.Address;
+import programmer.belajar.user.Address;
 import programmer.belajar.entity.Contact;
 
 import java.awt.*;

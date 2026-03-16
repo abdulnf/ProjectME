@@ -12,8 +12,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
-import programmer.belajar.entity.User;
-import programmer.belajar.repository.UserRepository;
+import programmer.belajar.user.UserRepository;
+import programmer.belajar.user.User;
 
 @Component
 @Slf4j

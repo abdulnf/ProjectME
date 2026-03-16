@@ -1,23 +1,20 @@
 package programmer.belajar.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import programmer.belajar.entity.User;
+//import programmer.belajar.entity.User;
+import programmer.belajar.user.User;
 import programmer.belajar.model.RegisterUserRequest;
 import programmer.belajar.model.UpdateUserRequest;
 import programmer.belajar.model.UserResponse;
-import programmer.belajar.repository.UserRepository;
 import programmer.belajar.security.BCrypt;
+import programmer.belajar.user.UserRepository;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class UserService {
