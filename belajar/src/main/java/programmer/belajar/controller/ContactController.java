@@ -1,93 +1,408 @@
+//////package programmer.belajar.controller;
+//////
+//////import org.springframework.beans.factory.annotation.Autowired;
+//////import org.springframework.data.domain.Page;
+//////import org.springframework.http.MediaType;
+//////import org.springframework.web.bind.annotation.*;
+//////import programmer.belajar.model.*;
+//////
+//////import programmer.belajar.service.ContactService;
+//////import programmer.belajar.user.User;
+//////
+//////import java.util.List;
+//////
+//////@RestController
+//////
+//////public class ContactController {
+//////    @Autowired
+//////    private ContactService contactService;
+//////
+//////    @PostMapping(
+//////            path = "/api/contacts",
+//////            consumes = MediaType.APPLICATION_JSON_VALUE,
+//////            produces = MediaType.APPLICATION_JSON_VALUE
+//////    )
+//////    public WebResponse<ContactResponse> create(User user, @RequestBody CreateContactRequest request){
+//////        ContactResponse contactResponse = contactService.create(user, request);
+//////        return WebResponse .< ContactResponse>builder().data(contactResponse).build();
+//////    }
+//////    @GetMapping(
+//////            path = "/api/contacts/{contactId}",
+//////            produces = MediaType.APPLICATION_JSON_VALUE)
+//////
+//////    public WebResponse<ContactResponse> get(User user, @PathVariable("contactId") String contactId) {
+//////        ContactResponse contactResponse = contactService.get(user, contactId);
+//////        return WebResponse.<ContactResponse>builder().data(contactResponse).build();
+//////    }
+//////    @PutMapping(
+//////            path = "/api/contacts/{contactId}",
+//////            consumes = MediaType.APPLICATION_JSON_VALUE,
+//////            produces = MediaType.APPLICATION_JSON_VALUE)
+//////
+//////    public WebResponse<ContactResponse> update(User user,
+//////                                               @RequestBody UpdateContactRequest request,
+//////                                               @PathVariable("contactId") String contactId) {
+//////
+//////        request.setId(contactId);
+//////
+//////        ContactResponse contactResponse = contactService.update(user, request);
+//////        return WebResponse.<ContactResponse>builder().data(contactResponse).build();
+//////    }
+//////
+//////
+//////    @DeleteMapping(
+//////            path = "/api/contacts/{contactId}",
+//////            produces = MediaType.APPLICATION_JSON_VALUE)
+//////
+//////    public WebResponse<String> delete(User user, @PathVariable("contactId") String contactId) {
+//////        contactService.delete(user, contactId);
+//////        return WebResponse .< String>builder().data("OK").build();
+//////
+//////    }
+//////
+//////    @GetMapping(
+//////            path = "/api/contacts",
+//////            produces = MediaType.APPLICATION_JSON_VALUE)
+//////
+//////    public WebResponse<List<ContactResponse>> search(User user,
+//////                                                     @RequestParam(value = "name", required = false) String name,
+//////                                                     @RequestParam(value = "email", required = false) String email,
+//////                                                     @RequestParam(value = "phone", required = false) String phone,
+//////                                                     @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+//////                                                     @RequestParam(value = "size", required = false, defaultValue = "10")Integer size) {
+//////        SearchContactRequest request = SearchContactRequest.builder()
+//////                .page(page)
+//////                .size(size)
+//////                .name(name)
+//////                .email(email)
+//////                .phone(phone)
+//////                .build();
+//////
+//////        Page<ContactResponse> contactResponses = contactService.search(user, request);
+//////        return WebResponse.<List<ContactResponse>>builder()
+//////                .data(contactResponses.getContent())
+//////                .paging(PagingResponse.builder()
+//////                        .currentPage(contactResponses.getNumber())
+//////                        .totalPage(contactResponses.getTotalPages())
+//////                        .size(contactResponses.getSize())
+//////                        .build())
+//////                .build();
+//////    }
+//////
+//////
+//////}
+////
+////
+////package programmer.belajar.controller;
+////
+////import lombok.RequiredArgsConstructor;
+////import org.springframework.data.domain.Page;
+////import org.springframework.http.MediaType;
+////import org.springframework.security.core.annotation.AuthenticationPrincipal;
+////import org.springframework.web.bind.annotation.*;
+////import programmer.belajar.model.*;
+////import programmer.belajar.service.ContactService;
+////import programmer.belajar.user.User;
+////
+////import java.util.List;
+////
+////@RestController
+////@RequiredArgsConstructor
+////@RequestMapping("/api/v1/contacts")
+////public class ContactController {
+////
+////    private final ContactService contactService;
+////
+////    @PostMapping(
+////            consumes = MediaType.APPLICATION_JSON_VALUE,
+////            produces = MediaType.APPLICATION_JSON_VALUE
+////    )
+////    public WebResponse<ContactResponse> create(
+////            @AuthenticationPrincipal User user,
+////            @RequestBody CreateContactRequest request
+////    ) {
+////        return WebResponse.<ContactResponse>builder()
+////                .data(contactService.create(user, request))
+////                .build();
+////    }
+////
+////    @GetMapping(
+////            path = "/{contactId}",
+////            produces = MediaType.APPLICATION_JSON_VALUE
+////    )
+////    public WebResponse<ContactResponse> get(
+////            @AuthenticationPrincipal User user,
+////            @PathVariable String contactId
+////    ) {
+////        return WebResponse.<ContactResponse>builder()
+////                .data(contactService.get(user, contactId))
+////                .build();
+////    }
+////
+////    @PutMapping(
+////            path = "/{contactId}",
+////            consumes = MediaType.APPLICATION_JSON_VALUE,
+////            produces = MediaType.APPLICATION_JSON_VALUE
+////    )
+////    public WebResponse<ContactResponse> update(
+////            @AuthenticationPrincipal User user,
+////            @RequestBody UpdateContactRequest request,
+////            @PathVariable String contactId
+////    ) {
+////        request.setId(contactId);
+////        return WebResponse.<ContactResponse>builder()
+////                .data(contactService.update(user, request))
+////                .build();
+////    }
+////
+////    @DeleteMapping(
+////            path = "/{contactId}",
+////            produces = MediaType.APPLICATION_JSON_VALUE
+////    )
+////    public WebResponse<String> delete(
+////            @AuthenticationPrincipal User user,
+////            @PathVariable String contactId
+////    ) {
+////        contactService.delete(user, contactId);
+////        return WebResponse.<String>builder().data("OK").build();
+////    }
+////
+////    @GetMapping(
+////            produces = MediaType.APPLICATION_JSON_VALUE
+////    )
+////    public WebResponse<List<ContactResponse>> search(
+////            @AuthenticationPrincipal User user,
+////            @RequestParam(required = false) String name,
+////            @RequestParam(required = false) String email,
+////            @RequestParam(required = false) String phone,
+////            @RequestParam(defaultValue = "0") Integer page,
+////            @RequestParam(defaultValue = "10") Integer size
+////    ) {
+////        SearchContactRequest request = SearchContactRequest.builder()
+////                .name(name)
+////                .email(email)
+////                .phone(phone)
+////                .page(page)
+////                .size(size)
+////                .build();
+////
+////        Page<ContactResponse> result = contactService.search(user, request);
+////
+////        return WebResponse.<List<ContactResponse>>builder()
+////                .data(result.getContent())
+////                .paging(PagingResponse.builder()
+////                        .currentPage(result.getNumber())
+////                        .totalPage(result.getTotalPages())
+////                        .size(result.getSize())
+////                        .build())
+////                .build();
+////    }
+////}
+//
+//package programmer.belajar.controller;
+//
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.data.domain.Page;
+//import org.springframework.http.MediaType;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.web.bind.annotation.*;
+//import programmer.belajar.model.*;
+//import programmer.belajar.service.ContactService;
+//import programmer.belajar.user.User;
+//
+//import java.util.List;
+//
+//@RestController
+//@RequiredArgsConstructor
+//@RequestMapping("/api/v1/contacts")
+//public class ContactController {
+//
+//    private final ContactService contactService;
+//
+//    private User getUser() {
+//        return (User) SecurityContextHolder.getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+//    }
+//
+//    @PostMapping(
+//            consumes = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    public WebResponse<ContactResponse> create(
+//            @RequestBody CreateContactRequest request
+//    ) {
+//        return WebResponse.<ContactResponse>builder()
+//                .data(contactService.create(getUser(), request))
+//                .build();
+//    }
+//
+//    @GetMapping("/{contactId}")
+//    public WebResponse<ContactResponse> get(@PathVariable String contactId) {
+//        return WebResponse.<ContactResponse>builder()
+//                .data(contactService.get(getUser(), contactId))
+//                .build();
+//    }
+//
+//    @PutMapping("/{contactId}")
+//    public WebResponse<ContactResponse> update(
+//            @RequestBody UpdateContactRequest request,
+//            @PathVariable String contactId
+//    ) {
+//        request.setId(contactId);
+//        return WebResponse.<ContactResponse>builder()
+//                .data(contactService.update(getUser(), request))
+//                .build();
+//    }
+//
+//    @DeleteMapping("/{contactId}")
+//    public WebResponse<String> delete(@PathVariable String contactId) {
+//        contactService.delete(getUser(), contactId);
+//        return WebResponse.<String>builder().data("OK").build();
+//    }
+//
+//    @GetMapping
+//    public WebResponse<List<ContactResponse>> search(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) String email,
+//            @RequestParam(required = false) String phone,
+//            @RequestParam(defaultValue = "0") Integer page,
+//            @RequestParam(defaultValue = "10") Integer size
+//    ) {
+//        SearchContactRequest request = SearchContactRequest.builder()
+//                .name(name)
+//                .email(email)
+//                .phone(phone)
+//                .page(page)
+//                .size(size)
+//                .build();
+//
+//        Page<ContactResponse> result = contactService.search(getUser(), request);
+//
+//        return WebResponse.<List<ContactResponse>>builder()
+//                .data(result.getContent())
+//                .paging(PagingResponse.builder()
+//                        .currentPage(result.getNumber())
+//                        .totalPage(result.getTotalPages())
+//                        .size(result.getSize())
+//                        .build())
+//                .build();
+//    }
+//}
+
 package programmer.belajar.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import programmer.belajar.model.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
+import programmer.belajar.model.*;
 import programmer.belajar.service.ContactService;
 import programmer.belajar.user.User;
 
 import java.util.List;
 
 @RestController
-
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/contacts")
 public class ContactController {
-    @Autowired
-    private ContactService contactService;
+
+    private final ContactService contactService;
+
+    private void validateUser(User user) {
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        }
+    }
 
     @PostMapping(
-            path = "/api/contacts",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<ContactResponse> create(User user, @RequestBody CreateContactRequest request){
-        ContactResponse contactResponse = contactService.create(user, request);
-        return WebResponse .< ContactResponse>builder().data(contactResponse).build();
-    }
-    @GetMapping(
-            path = "/api/contacts/{contactId}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<ContactResponse> create(
+            @AuthenticationPrincipal User user,
+            @RequestBody CreateContactRequest request
+    ) {
+        validateUser(user);
 
-    public WebResponse<ContactResponse> get(User user, @PathVariable("contactId") String contactId) {
-        ContactResponse contactResponse = contactService.get(user, contactId);
-        return WebResponse.<ContactResponse>builder().data(contactResponse).build();
+        return WebResponse.<ContactResponse>builder()
+                .data(contactService.create(user, request))
+                .build();
     }
-    @PutMapping(
-            path = "/api/contacts/{contactId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
 
-    public WebResponse<ContactResponse> update(User user,
-                                               @RequestBody UpdateContactRequest request,
-                                               @PathVariable("contactId") String contactId) {
+    @GetMapping("/{contactId}")
+    public WebResponse<ContactResponse> get(
+            @AuthenticationPrincipal User user,
+            @PathVariable String contactId
+    ) {
+        validateUser(user);
+
+        return WebResponse.<ContactResponse>builder()
+                .data(contactService.get(user, contactId))
+                .build();
+    }
+
+    @PutMapping("/{contactId}")
+    public WebResponse<ContactResponse> update(
+            @AuthenticationPrincipal User user,
+            @RequestBody UpdateContactRequest request,
+            @PathVariable String contactId
+    ) {
+        validateUser(user);
 
         request.setId(contactId);
 
-        ContactResponse contactResponse = contactService.update(user, request);
-        return WebResponse.<ContactResponse>builder().data(contactResponse).build();
+        return WebResponse.<ContactResponse>builder()
+                .data(contactService.update(user, request))
+                .build();
     }
 
+    @DeleteMapping("/{contactId}")
+    public WebResponse<String> delete(
+            @AuthenticationPrincipal User user,
+            @PathVariable String contactId
+    ) {
+        validateUser(user);
 
-    @DeleteMapping(
-            path = "/api/contacts/{contactId}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
-    public WebResponse<String> delete(User user, @PathVariable("contactId") String contactId) {
         contactService.delete(user, contactId);
-        return WebResponse .< String>builder().data("OK").build();
 
+        return WebResponse.<String>builder()
+                .data("OK")
+                .build();
     }
 
-    @GetMapping(
-            path = "/api/contacts",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
+    public WebResponse<List<ContactResponse>> search(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        validateUser(user);
 
-    public WebResponse<List<ContactResponse>> search(User user,
-                                                     @RequestParam(value = "name", required = false) String name,
-                                                     @RequestParam(value = "email", required = false) String email,
-                                                     @RequestParam(value = "phone", required = false) String phone,
-                                                     @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                     @RequestParam(value = "size", required = false, defaultValue = "10")Integer size) {
         SearchContactRequest request = SearchContactRequest.builder()
-                .page(page)
-                .size(size)
                 .name(name)
                 .email(email)
                 .phone(phone)
+                .page(page)
+                .size(size)
                 .build();
 
-        Page<ContactResponse> contactResponses = contactService.search(user, request);
+        Page<ContactResponse> result = contactService.search(user, request);
+
         return WebResponse.<List<ContactResponse>>builder()
-                .data(contactResponses.getContent())
+                .data(result.getContent())
                 .paging(PagingResponse.builder()
-                        .currentPage(contactResponses.getNumber())
-                        .totalPage(contactResponses.getTotalPages())
-                        .size(contactResponses.getSize())
+                        .currentPage(result.getNumber())
+                        .totalPage(result.getTotalPages())
+                        .size(result.getSize())
                         .build())
                 .build();
     }
-
-
 }

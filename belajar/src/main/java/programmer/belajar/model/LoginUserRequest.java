@@ -1,25 +1,46 @@
+//package programmer.belajar.model;
+//
+//import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.Size;
+//import lombok.AllArgsConstructor;
+//import lombok.Builder;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
+//
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
+//
+//public class LoginUserRequest {
+//
+//    @NotBlank
+//    @Size(max = 100)
+//    private String username;
+//
+//    @NotBlank
+//    @Size(max = 100)
+//    private String password;
+//
+//}
+
 package programmer.belajar.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class LoginUserRequest {
 
     @NotBlank
     @Size(max = 100)
-    private String username;
+    private String email;
 
     @NotBlank
     @Size(max = 100)
     private String password;
-
 }
