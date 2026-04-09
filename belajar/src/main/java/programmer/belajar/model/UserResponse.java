@@ -22,6 +22,7 @@
 package programmer.belajar.model;
 
 import lombok.*;
+import programmer.belajar.user.Role;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +32,5 @@ public class UserResponse {
 
         private String email;
         private String name;
-
+        private Role role;
 }

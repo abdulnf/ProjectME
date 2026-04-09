@@ -323,7 +323,7 @@ public class Contact {
 
     @ManyToOne
     @JoinColumn(name = "user_email")
-    @JsonIgnore // 🔥 penting
+    @JsonIgnore //penting
     private User user;
 
     @OneToMany(mappedBy = "contact")

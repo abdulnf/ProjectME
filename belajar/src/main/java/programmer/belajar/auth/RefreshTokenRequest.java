@@ -9,22 +9,17 @@
 //@Builder
 //@AllArgsConstructor
 //@NoArgsConstructor
+//public class RefreshTokenRequest {
 //
-//public class AuthenticationResponse {
-//    private String token;
+//    private String refreshToken;
+//
 //}
 
 package programmer.belajar.auth;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationResponse {
-
-    private String accessToken;
+public class RefreshTokenRequest {
     private String refreshToken;
-
 }

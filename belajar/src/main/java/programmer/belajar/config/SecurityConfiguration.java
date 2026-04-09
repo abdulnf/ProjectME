@@ -1,346 +1,1 @@
-////////////////package programmer.belajar.config;
-////////////////
-////////////////import lombok.RequiredArgsConstructor;
-////////////////import org.springframework.context.annotation.Bean;
-////////////////import org.springframework.context.annotation.Configuration;
-////////////////import org.springframework.security.authentication.AuthenticationProvider;
-////////////////import org.springframework.security.config.Customizer;
-////////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-////////////////import org.springframework.security.config.http.SessionCreationPolicy;
-////////////////import org.springframework.security.core.Authentication;
-////////////////import org.springframework.security.web.SecurityFilterChain;
-////////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-////////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-////////////////
-////////////////@Configuration
-////////////////@EnableWebSecurity
-////////////////@RequiredArgsConstructor
-////////////////
-////////////////public class SecurityConfiguration {
-////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-////////////////    private final AuthenticationProvider authenticationProvider;
-////////////////
-////////////////
-//////////////////    @Bean
-//////////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//////////////////        http
-//////////////////                .csrf(csrf -> csrf.disable())
-//////////////////                .authorizeHttpRequests(
-//////////////////                        auth ->
-//////////////////                                auth.requestMatchers("/api/v1/auth/**")
-//////////////////                                .permitAll()
-//////////////////                                .anyRequest()
-//////////////////                                .authenticated()
-//////////////////                )
-//////////////////                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//////////////////                .authenticationProvider(authenticationProvider)
-//////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//////////////////
-//////////////////        return http.build();
-//////////////////    }
-////////////////
-////////////////    @Bean
-////////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-////////////////        http
-////////////////                .csrf(csrf -> csrf.disable())
-////////////////                .cors(cors -> cors.configurationSource(request -> {
-////////////////                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-////////////////                    corsConfig.addAllowedOrigin("*");
-////////////////                    corsConfig.addAllowedMethod("*");
-////////////////                    corsConfig.addAllowedHeader("*");
-////////////////                    return corsConfig;
-////////////////                }))
-////////////////                .authorizeHttpRequests(auth -> auth
-////////////////                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/auth/**").permitAll()
-////////////////                        .requestMatchers("/api/v1/auth/**").permitAll()
-////////////////                        .anyRequest().authenticated()
-////////////////                )
-////////////////                .sessionManagement(session ->
-////////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////////////////                )
-////////////////                .authenticationProvider(authenticationProvider)
-////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-////////////////
-////////////////        return http.build();
-////////////////    }
-////////////////}
-//////////////
-//////////////package programmer.belajar.config;
-//////////////
-//////////////import lombok.RequiredArgsConstructor;
-//////////////import org.springframework.context.annotation.Bean;
-//////////////import org.springframework.context.annotation.Configuration;
-//////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//////////////import org.springframework.security.config.http.SessionCreationPolicy;
-//////////////import org.springframework.security.web.SecurityFilterChain;
-//////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//////////////
-//////////////@Configuration
-//////////////@EnableWebSecurity
-//////////////@RequiredArgsConstructor
-//////////////public class SecurityConfiguration {
-//////////////
-//////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//////////////
-//////////////    @Bean
-//////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//////////////        http
-//////////////                .csrf(csrf -> csrf.disable())
-//////////////                .authorizeHttpRequests(auth -> auth
-//////////////                        .requestMatchers("/api/v1/auth/**").permitAll()
-//////////////                        .anyRequest().authenticated()
-//////////////                )
-//////////////                .sessionManagement(session ->
-//////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//////////////                )
-//////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//////////////
-//////////////        return http.build();
-//////////////    }
-//////////////}
-////////////
-////////////package programmer.belajar.config;
-////////////
-////////////import lombok.RequiredArgsConstructor;
-////////////import org.springframework.context.annotation.Bean;
-////////////import org.springframework.context.annotation.Configuration;
-////////////import org.springframework.security.authentication.AuthenticationProvider;
-////////////import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-////////////import org.springframework.security.config.http.SessionCreationPolicy;
-////////////import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-////////////import org.springframework.security.crypto.password.PasswordEncoder;
-////////////import org.springframework.security.web.SecurityFilterChain;
-////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-////////////import programmer.belajar.service.CustomUserDetailsService;
-////////////
-////////////@Configuration
-////////////@EnableWebSecurity
-////////////@RequiredArgsConstructor
-////////////public class SecurityConfiguration {
-////////////
-////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-////////////    private final CustomUserDetailsService userDetailsService;
-////////////
-////////////    @Bean
-////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-////////////        http
-////////////                .csrf(csrf -> csrf.disable())
-////////////                .authorizeHttpRequests(auth -> auth
-////////////                        .requestMatchers("/api/v1/auth/**").permitAll()
-////////////                        .anyRequest().authenticated()
-////////////                )
-////////////                .sessionManagement(session ->
-////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////////////                )
-////////////                .authenticationProvider(authenticationProvider())
-////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-////////////
-////////////        return http.build();
-////////////    }
-////////////
-////////////    @Bean
-////////////    public AuthenticationProvider authenticationProvider() {
-////////////        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-////////////        provider.setUserDetailsService(userDetailsService);
-////////////        provider.setPasswordEncoder(passwordEncoder());
-////////////        return provider;
-////////////    }
-////////////
-////////////    @Bean
-////////////    public PasswordEncoder passwordEncoder() {
-////////////        return new BCryptPasswordEncoder();
-////////////    }
-////////////}
-//////////
-//////////package programmer.belajar.config;
-//////////
-//////////import lombok.RequiredArgsConstructor;
-//////////import org.springframework.context.annotation.Bean;
-//////////import org.springframework.context.annotation.Configuration;
-//////////import org.springframework.security.authentication.AuthenticationManager;
-//////////import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-//////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//////////import org.springframework.security.config.http.SessionCreationPolicy;
-//////////import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//////////import org.springframework.security.crypto.password.PasswordEncoder;
-//////////import org.springframework.security.web.SecurityFilterChain;
-//////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//////////
-//////////@Configuration
-//////////@EnableWebSecurity
-//////////@RequiredArgsConstructor
-//////////public class SecurityConfiguration {
-//////////
-//////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//////////
-//////////    @Bean
-//////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//////////        http
-//////////                .csrf(csrf -> csrf.disable())
-//////////                .authorizeHttpRequests(auth -> auth
-//////////                        .requestMatchers("/api/v1/auth/**").permitAll()
-//////////                        .anyRequest().authenticated()
-//////////                )
-//////////                .sessionManagement(session ->
-//////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//////////                )
-//////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//////////
-//////////        return http.build();
-//////////    }
-//////////
-//////////    @Bean
-//////////    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//////////        return config.getAuthenticationManager();
-//////////    }
-//////////
-//////////    @Bean
-//////////    public PasswordEncoder passwordEncoder() {
-//////////        return new BCryptPasswordEncoder();
-//////////    }
-//////////}
-////////package programmer.belajar.config;
-////////
-////////import lombok.RequiredArgsConstructor;
-////////import org.springframework.context.annotation.Bean;
-////////import org.springframework.context.annotation.Configuration;
-////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-////////import org.springframework.security.config.http.SessionCreationPolicy;
-////////import org.springframework.security.web.SecurityFilterChain;
-////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-////////
-////////@Configuration
-////////@EnableWebSecurity
-////////@RequiredArgsConstructor
-////////public class SecurityConfiguration {
-////////
-////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-////////
-////////    @Bean
-////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-////////        http
-////////                .csrf(csrf -> csrf.disable())
-////////                .authorizeHttpRequests(auth -> auth
-////////                        .requestMatchers("/api/v1/auth/**").permitAll()
-////////                        .anyRequest().authenticated()
-////////                )
-////////                .sessionManagement(session ->
-////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////////                )
-////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-////////
-////////        return http.build();
-////////    }
-////////}
-//////package programmer.belajar.config;
-//////
-//////import lombok.RequiredArgsConstructor;
-//////import org.springframework.context.annotation.Bean;
-//////import org.springframework.context.annotation.Configuration;
-//////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//////import org.springframework.security.config.http.SessionCreationPolicy;
-//////import org.springframework.security.web.SecurityFilterChain;
-//////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//////
-//////@Configuration
-//////@EnableWebSecurity
-//////@RequiredArgsConstructor
-//////public class SecurityConfiguration {
-//////
-//////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//////
-//////    @Bean
-//////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//////        http
-//////                .csrf(csrf -> csrf.disable())
-//////                .authorizeHttpRequests(auth -> auth
-//////                        .requestMatchers("/api/v1/auth/**").permitAll()
-//////                        .anyRequest().authenticated()
-//////                )
-//////                .sessionManagement(session ->
-//////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//////                )
-//////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//////
-//////        return http.build();
-//////    }
-//////}
-////
-////package programmer.belajar.config;
-////
-////import lombok.RequiredArgsConstructor;
-////import org.springframework.context.annotation.Bean;
-////import org.springframework.context.annotation.Configuration;
-////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-////import org.springframework.security.config.http.SessionCreationPolicy;
-////import org.springframework.security.web.SecurityFilterChain;
-////import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-////
-////@Configuration
-////@EnableWebSecurity
-////@RequiredArgsConstructor
-////public class SecurityConfiguration {
-////
-////    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-////
-////    @Bean
-////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-////        http
-////                .csrf(csrf -> csrf.disable())
-////                .authorizeHttpRequests(auth -> auth
-////                        .requestMatchers("/api/v1/auth/**").permitAll()
-////                        .anyRequest().authenticated()
-////                )
-////                .sessionManagement(session ->
-////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////                )
-////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-////
-////        return http.build();
-////    }
-////}
-
-package programmer.belajar.config;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-@Configuration
-@EnableWebSecurity
-@RequiredArgsConstructor
-public class SecurityConfiguration {
-
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-}
-
-
-
+//////////////////package programmer.belajar.config;////////////////////////////////////import lombok.RequiredArgsConstructor;//////////////////import org.springframework.context.annotation.Bean;//////////////////import org.springframework.context.annotation.Configuration;//////////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;//////////////////import org.springframework.security.config.http.SessionCreationPolicy;//////////////////import org.springframework.security.web.SecurityFilterChain;//////////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;//////////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;//////////////////import org.springframework.web.cors.CorsConfiguration;//////////////////import org.springframework.web.cors.CorsConfigurationSource;//////////////////import org.springframework.web.cors.UrlBasedCorsConfigurationSource;////////////////////////////////////import java.util.Arrays;//////////////////////////////////////////////////////@Configuration//////////////////@EnableWebSecurity//////////////////@RequiredArgsConstructor//////////////////public class SecurityConfiguration {////////////////////////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////////////////////////    @Bean//////////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//////////////////        http//////////////////                .csrf(csrf -> csrf.disable())//////////////////                .authorizeHttpRequests(auth -> auth//////////////////                        .requestMatchers("/api/v1/auth/**").permitAll()//////////////////                        .anyRequest().authenticated()//////////////////                )//////////////////                .sessionManagement(session ->//////////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)//////////////////                )//////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////////////////////////        return http.build();//////////////////    }//////////////////        //...//////////////////        @Bean//////////////////        CorsConfigurationSource corsConfigurationSource() {//////////////////            CorsConfiguration configuration = new CorsConfiguration();//////////////////            configuration.setAllowedOrigins(Arrays.asList("https://example.com"));//////////////////            configuration.setAllowedMethods(Arrays.asList("GET","PATCH","PUT","DELETE","POST","HEAD","OPTIONS"));//////////////////            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();//////////////////            source.registerCorsConfiguration("/**", configuration);//////////////////            return source;//////////////////        }////////////////////////////////////}//////////////////////////////////////////////////////////////////////////////////////package programmer.belajar.config;////////////////////////////////import lombok.RequiredArgsConstructor;////////////////import org.springframework.context.annotation.Bean;////////////////import org.springframework.context.annotation.Configuration;////////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;////////////////import org.springframework.security.config.http.SessionCreationPolicy;////////////////import org.springframework.security.web.SecurityFilterChain;////////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;////////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;////////////////////////////////@Configuration////////////////@EnableWebSecurity////////////////@RequiredArgsConstructor////////////////public class SecurityConfiguration {////////////////////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////////////////////    @Bean////////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {////////////////        http////////////////                .csrf(csrf -> csrf.disable())////////////////                .authorizeHttpRequests(auth -> auth////////////////                        .requestMatchers("/api/v1/auth/**").permitAll()////////////////////////////////                        // ✅ ROLE RULES////////////////                        .requestMatchers("/api/admin/**").hasRole("ADMIN")////////////////                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")////////////////////////////////                        .anyRequest().authenticated()////////////////                )////////////////                .sessionManagement(session ->////////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)////////////////                )////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////////////////////        return http.build();////////////////    }////////////////}////////////////////////////package programmer.belajar.config;////////////////////////////import lombok.RequiredArgsConstructor;//////////////import org.springframework.context.annotation.Bean;//////////////import org.springframework.context.annotation.Configuration;//////////////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;//////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;//////////////import org.springframework.security.config.http.SessionCreationPolicy;//////////////import org.springframework.security.web.SecurityFilterChain;//////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;//////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;//////////////import org.springframework.web.cors.CorsConfiguration;//////////////import org.springframework.web.cors.CorsConfigurationSource;//////////////import org.springframework.web.cors.UrlBasedCorsConfigurationSource;////////////////////////////import java.util.Arrays;////////////////////////////@Configuration//////////////@EnableWebSecurity//////////////@EnableMethodSecurity//////////////@RequiredArgsConstructor//////////////public class SecurityConfiguration {////////////////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////////////////    @Bean//////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//////////////        http//////////////                .csrf(csrf -> csrf.disable())//////////////                .authorizeHttpRequests(auth -> auth//////////////                        .requestMatchers("/api/v1/auth/**").permitAll()//////////////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")//////////////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")////////////////////////////                        .anyRequest().authenticated()//////////////                )//////////////                .sessionManagement(session ->//////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)//////////////                )//////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////////////////        return http.build();//////////////    }////////////////////////////    @Bean//////////////    CorsConfigurationSource corsConfigurationSource() {//////////////            CorsConfiguration configuration = new CorsConfiguration();//////////////            configuration.setAllowedOrigins(Arrays.asList("https://192.168.40.87"));//////////////            configuration.setAllowedMethods(Arrays.asList("GET","PATCH","PUT","DELETE","POST","HEAD","OPTIONS"));//////////////            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();//////////////            source.registerCorsConfiguration("/**", configuration);//////////////            return source;//////////////        }//////////////}////////////////////////package programmer.belajar.config;////////////////////////import lombok.RequiredArgsConstructor;////////////import org.springframework.context.annotation.Bean;////////////import org.springframework.context.annotation.Configuration;////////////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;////////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;////////////import org.springframework.security.config.http.SessionCreationPolicy;////////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;////////////import org.springframework.security.web.SecurityFilterChain;////////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;////////////import org.springframework.web.cors.*;////////////////////////import java.util.Arrays;////////////////////////@Configuration////////////@EnableWebSecurity////////////@EnableMethodSecurity////////////@RequiredArgsConstructor////////////public class SecurityConfiguration {////////////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////////////    @Bean////////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {////////////        http////////////                .csrf(csrf -> csrf.disable())////////////////////////                // ✅ IMPORTANT: enable CORS////////////                .cors(cors -> {})////////////////////////                .authorizeHttpRequests(auth -> auth////////////                        .requestMatchers("/api/v1/auth/**").permitAll()////////////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")////////////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")////////////                        .anyRequest().authenticated()////////////                )////////////////////////                .sessionManagement(session ->////////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)////////////                )////////////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////////////        return http.build();////////////    }////////////////////////    @Bean////////////    CorsConfigurationSource corsConfigurationSource() {////////////        CorsConfiguration configuration = new CorsConfiguration();////////////        configuration.setAllowedOriginPatterns(Arrays.asList("*"));////////////        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));////////////        configuration.setAllowedHeaders(Arrays.asList("*"));////////////        configuration.setAllowCredentials(true);////////////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();////////////        source.registerCorsConfiguration("/**", configuration);////////////////////////        return source;////////////    }////////////////////////}////////////////////package programmer.belajar.config;////////////////////import lombok.RequiredArgsConstructor;//////////import org.springframework.context.annotation.Bean;//////////import org.springframework.context.annotation.Configuration;//////////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;//////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;//////////import org.springframework.security.config.http.SessionCreationPolicy;//////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;//////////import org.springframework.security.web.SecurityFilterChain;//////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;//////////import org.springframework.web.cors.*;////////////////////import java.util.Arrays;////////////////////@Configuration//////////@EnableWebSecurity//////////@EnableMethodSecurity//////////@RequiredArgsConstructor//////////public class SecurityConfiguration {////////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////////    @Bean//////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//////////        http//////////                .csrf(csrf -> csrf.disable())////////////////////                // ✅ ENABLE CORS//////////                .cors(cors -> {})////////////////////                .authorizeHttpRequests(auth -> auth//////////                        .requestMatchers("/api/v1/auth/**").permitAll()//////////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")//////////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")//////////                        .anyRequest().authenticated()//////////                )////////////////////                .sessionManagement(session ->//////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)//////////                )////////////////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////////        return http.build();//////////    }////////////////////    @Bean//////////    public CorsConfigurationSource corsConfigurationSource() {//////////        CorsConfiguration configuration = new CorsConfiguration();//////////        configuration.setAllowedOrigins(Arrays.asList("http://192.168.40.87:3000"));//////////        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));//////////        configuration.setAllowedHeaders(Arrays.asList("*"));//////////        configuration.setAllowCredentials(true);//////////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();//////////        source.registerCorsConfiguration("/**", configuration);////////////////////        return source;//////////    }//////////}////////////////////////package programmer.belajar.config;////////////////import lombok.RequiredArgsConstructor;////////import org.springframework.context.annotation.Bean;////////import org.springframework.context.annotation.Configuration;////////import org.springframework.security.config.Customizer;////////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;////////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;////////import org.springframework.security.config.http.SessionCreationPolicy;////////import org.springframework.security.config.annotation.web.builders.HttpSecurity;////////import org.springframework.security.web.SecurityFilterChain;////////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;////////import org.springframework.web.cors.*;////////////////import java.util.Arrays;////////////////@Configuration////////@EnableWebSecurity////////@EnableMethodSecurity////////@RequiredArgsConstructor////////public class SecurityConfiguration {////////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////////    @Bean////////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {////////        http////////                .csrf(csrf -> csrf.disable())////////////////                // ✅ enable CORS////////                .cors(Customizer.withDefaults())////////////////                .authorizeHttpRequests(auth -> auth////////                        // ✅ PUBLIC (no token needed)////////                        .requestMatchers(////////                                "/test",////////                                "/api/v1/auth/**"////////                        ).permitAll()////////////////                        // ✅ ROLE-BASED////////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")////////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")////////////////                        // ✅ EVERYTHING ELSE NEEDS TOKEN////////                        .anyRequest().authenticated()////////                )////////////////                .sessionManagement(session ->////////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)////////                )////////////////                // ✅ JWT FILTER////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////////        return http.build();////////    }////////////////    // ✅ CORS CONFIG (frontend access)////////    @Bean////////    public CorsConfigurationSource corsConfigurationSource() {////////        CorsConfiguration configuration = new CorsConfiguration();////////////////        configuration.setAllowedOrigins(Arrays.asList(////////                "http://192.168.40.87:3000"////////        ));////////////////        configuration.setAllowedMethods(Arrays.asList(////////                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"////////        ));////////////////        configuration.setAllowedHeaders(Arrays.asList("*"));////////        configuration.setAllowCredentials(true);////////////////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();////////        source.registerCorsConfiguration("/**", configuration);////////////////        return source;////////    }////////}////////////package programmer.belajar.config;////////////import lombok.RequiredArgsConstructor;//////import org.springframework.context.annotation.Bean;//////import org.springframework.context.annotation.Configuration;//////import org.springframework.http.HttpMethod;//////import org.springframework.security.config.Customizer;//////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;//////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;//////import org.springframework.security.config.http.SessionCreationPolicy;//////import org.springframework.security.config.annotation.web.builders.HttpSecurity;//////import org.springframework.security.web.SecurityFilterChain;//////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;//////import org.springframework.web.cors.*;////////////import java.util.Arrays;////////////@Configuration//////@EnableWebSecurity//////@EnableMethodSecurity//////@RequiredArgsConstructor//////public class SecurityConfiguration {////////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////////////    @Bean//////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//////        http//////                .csrf(csrf -> csrf.disable())////////////                // ✅ enable CORS//////                .cors(Customizer.withDefaults())////////////                .authorizeHttpRequests(auth -> auth//////                        // ✅ PUBLIC (no token needed)//////                        .requestMatchers(//////                                "/test",//////                                "/api/v1/auth/**"//////                        ).permitAll()////////////                        // ✅ CRITICAL FIX (preflight requests)//////                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()////////////                        // ✅ ROLE-BASED//////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")//////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")////////////                        // ✅ EVERYTHING ELSE NEEDS TOKEN//////                        .anyRequest().authenticated()//////                )////////////                .sessionManagement(session ->//////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)//////                )////////////                // ✅ JWT FILTER//////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////////        return http.build();//////    }////////////    // ✅ CORS CONFIG (frontend access)//////    @Bean//////    public CorsConfigurationSource corsConfigurationSource() {//////        CorsConfiguration configuration = new CorsConfiguration();////////////        configuration.setAllowedOrigins(Arrays.asList(//////                "http://localhost:5173",//////                "http://192.168.40.87:3000"//////        ));////////////        configuration.setAllowedMethods(Arrays.asList(//////                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"//////        ));////////////        configuration.setAllowedHeaders(Arrays.asList("*"));//////        configuration.setAllowCredentials(true);////////////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();//////        source.registerCorsConfiguration("/**", configuration);////////////        return source;//////    }//////}////package programmer.belajar.config;////////import lombok.RequiredArgsConstructor;////import org.springframework.context.annotation.Bean;////import org.springframework.context.annotation.Configuration;////import org.springframework.security.authentication.AuthenticationManager;////import org.springframework.security.authentication.AuthenticationProvider;////import org.springframework.security.authentication.dao.DaoAuthenticationProvider;////import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;////import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;////import org.springframework.security.config.annotation.web.builders.HttpSecurity;////import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;////import org.springframework.security.config.http.SessionCreationPolicy;////import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;////import org.springframework.security.crypto.password.PasswordEncoder;////import org.springframework.security.web.SecurityFilterChain;////import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;////import org.springframework.web.cors.*;////////import java.util.Arrays;////////@Configuration////@EnableWebSecurity////@EnableMethodSecurity////@RequiredArgsConstructor////public class SecurityConfiguration {////////    private final JwtAuthenticationFilter jwtAuthenticationFilter;////    private final CustomUserDetailsService customUserDetailsService;////////    @Bean////    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {////        http////                .csrf(csrf -> csrf.disable())////////                .cors(cors -> {})////////                .authorizeHttpRequests(auth -> auth////                        .requestMatchers("/test", "/api/v1/auth/**").permitAll()////                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")////                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")////                        .anyRequest().authenticated()////                )////////                .sessionManagement(session ->////                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)////                )////////                .authenticationProvider(authenticationProvider())////////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////////        return http.build();////    }////////    @Bean////    public AuthenticationProvider authenticationProvider() {////        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();////        provider.setUserDetailsService(customUserDetailsService);////        provider.setPasswordEncoder(passwordEncoder());////        return provider;////    }////////    @Bean////    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {////        return config.getAuthenticationManager();////    }////////    @Bean////    public PasswordEncoder passwordEncoder() {////        return new BCryptPasswordEncoder();////    }////////    @Bean////    public CorsConfigurationSource corsConfigurationSource() {////        CorsConfiguration configuration = new CorsConfiguration();////////        configuration.setAllowedOrigins(Arrays.asList(////                "http://192.168.40.87:3000",////                "http://192.168.40.87:5178"////        ));////////        configuration.setAllowedMethods(Arrays.asList(////                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"////        ));////////        configuration.setAllowedHeaders(Arrays.asList("*"));////        configuration.setAllowCredentials(true);////////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();////        source.registerCorsConfiguration("/**", configuration);////////        return source;////    }////}////package programmer.belajar.config;////import lombok.RequiredArgsConstructor;//import org.springframework.context.annotation.Bean;//import org.springframework.context.annotation.Configuration;//import org.springframework.security.authentication.AuthenticationManager;//import org.springframework.security.authentication.AuthenticationProvider;//import org.springframework.security.authentication.dao.DaoAuthenticationProvider;//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;//import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;//import org.springframework.security.config.annotation.web.builders.HttpSecurity;//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;//import org.springframework.security.config.http.SessionCreationPolicy;//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;//import org.springframework.security.crypto.password.PasswordEncoder;//import org.springframework.security.web.SecurityFilterChain;//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;//import org.springframework.web.cors.*;////import java.util.Arrays;////@Configuration//@EnableWebSecurity//@EnableMethodSecurity//@RequiredArgsConstructor//public class SecurityConfiguration {////    private final JwtAuthenticationFilter jwtAuthenticationFilter;//    private final CustomUserDetailsService customUserDetailsService;////    // 🔐 SECURITY FILTER//    @Bean//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//        http//                .csrf(csrf -> csrf.disable())////                .cors(cors -> {})////                .authorizeHttpRequests(auth -> auth//                        .requestMatchers("/test", "/api/v1/auth/**").permitAll()//                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")//                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")//                        .anyRequest().authenticated()//                )////                .sessionManagement(session ->//                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)//                )////                .authenticationProvider(authenticationProvider())////                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);////        return http.build();//    }////    // 🔐 AUTH PROVIDER (FIXED CONSTRUCTOR)//    @Bean//    public AuthenticationProvider authenticationProvider() {//        DaoAuthenticationProvider provider =//                new DaoAuthenticationProvider(customUserDetailsService);//        provider.setPasswordEncoder(passwordEncoder());//        return provider;//    }////    // 🔐 AUTH MANAGER (REQUIRED)//    @Bean//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {//        return config.getAuthenticationManager();//    }////    // 🔐 PASSWORD ENCODER//    @Bean//    public PasswordEncoder passwordEncoder() {//        return new BCryptPasswordEncoder();//    }////    // 🌐 CORS CONFIG//    @Bean//    public CorsConfigurationSource corsConfigurationSource() {//        CorsConfiguration configuration = new CorsConfiguration();////        configuration.setAllowedOrigins(Arrays.asList(//                "http://192.168.40.87:3000",//                "http://192.168.40.87:5178"//        ));////        configuration.setAllowedMethods(Arrays.asList(//                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"//        ));////        configuration.setAllowedHeaders(Arrays.asList("*"));//        configuration.setAllowCredentials(true);////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();//        source.registerCorsConfiguration("/**", configuration);////        return source;//    }////    @Bean//    public AuthenticationProvider authenticationProvider() {//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();//        provider.setUserDetailsService(customUserDetailsService); // ✅ REQUIRED//        provider.setPasswordEncoder(passwordEncoder());//        return provider;//    }//}package programmer.belajar.config;import lombok.RequiredArgsConstructor;import org.springframework.context.annotation.Bean;import org.springframework.context.annotation.Configuration;import org.springframework.security.authentication.AuthenticationProvider;import org.springframework.security.authentication.dao.DaoAuthenticationProvider;import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;import org.springframework.security.config.annotation.web.builders.HttpSecurity;import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;import org.springframework.security.config.http.SessionCreationPolicy;import org.springframework.security.crypto.password.PasswordEncoder;import org.springframework.security.web.SecurityFilterChain;import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;import org.springframework.web.cors.CorsConfiguration;import org.springframework.web.cors.CorsConfigurationSource;import org.springframework.web.cors.UrlBasedCorsConfigurationSource;import java.util.Arrays;@Configuration@EnableWebSecurity@EnableMethodSecurity@RequiredArgsConstructorpublic class SecurityConfiguration {    private final JwtAuthenticationFilter jwtAuthenticationFilter;    private final CustomUserDetailsService customUserDetailsService;    private final PasswordEncoder passwordEncoder;    @Bean    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {        http                .csrf(csrf -> csrf.disable())                .cors(cors -> cors.configurationSource(corsConfigurationSource()))                .authorizeHttpRequests(auth -> auth                        .requestMatchers("/test", "/api/v1/auth/**").permitAll()                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")                        .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")                        .anyRequest().authenticated()                )                .sessionManagement(session ->                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)                )                .authenticationProvider(authenticationProvider())                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);        return http.build();    }    @Bean    public AuthenticationProvider authenticationProvider() {        DaoAuthenticationProvider provider =                new DaoAuthenticationProvider(customUserDetailsService);        provider.setPasswordEncoder(passwordEncoder);        return provider;    }    @Bean    public CorsConfigurationSource corsConfigurationSource() {        CorsConfiguration configuration = new CorsConfiguration();        configuration.setAllowedOrigins(Arrays.asList(  "http://localhost:5173","http://192.168.40.87:3000", "http://192.168.40.87:5173"));        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));        configuration.setAllowedHeaders(Arrays.asList("*"));        configuration.setAllowCredentials(true);        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();        source.registerCorsConfiguration("/**", configuration);        return source;    }}
